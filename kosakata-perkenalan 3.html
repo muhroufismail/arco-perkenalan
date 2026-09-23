@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kosakata Perkenalan Bahasa Arab</title>
+<style>
+  :root{
+    --bg:#f6f3ef;
+    --card:#ffffff;
+    --ink:#26231f;
+    --sub:#6b6459;
+    --accent:#b5642c;
+    --accent-2:#2f6b57;
+    --line:#e7e0d6;
+    --danger:#c0392b;
+    --shadow: 0 8px 24px rgba(38,35,31,0.08);
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#1c1a17;
+      --card:#26231f;
+      --ink:#f2ece2;
+      --sub:#b8ada0;
+      --accent:#e08a4f;
+      --accent-2:#5fbf9f;
+      --line:#3a352d;
+      --shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#1c1a17;
+    --card:#26231f;
+    --ink:#f2ece2;
+    --sub:#b8ada0;
+    --accent:#e08a4f;
+    --accent-2:#5fbf9f;
+    --line:#3a352d;
+    --shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+  html{scroll-padding-top:env(safe-area-inset-top,0px); height:100%;}
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    height:100%;
+    background:var(--bg);
+    color:var(--ink);
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:24px 16px 40px;
+  }
+  h1{
+    font-size:1.3rem;
+    margin:4px 0 2px;
+    text-align:center;
+  }
+  .subtitle{
+    color:var(--sub);
+    font-size:0.9rem;
+    margin-bottom:18px;
+    text-align:center;
+  }
+  .wrap{
+    width:100%;
+    max-width:480px;
+  }
+  .progress-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:0.8rem;
+    color:var(--sub);
+    margin-bottom:8px;
+  }
+  .progress-bar{
+    width:100%;
+    height:6px;
+    background:var(--line);
+    border-radius:999px;
+    overflow:hidden;
+    margin-bottom:18px;
+  }
+  .progress-fill{
+    height:100%;
+    background:var(--accent);
+    border-radius:999px;
+    transition:width .25s ease;
+  }
+  .card{
+    background:var(--card);
+    border-radius:20px;
+    box-shadow:var(--shadow);
+    border:1px solid var(--line);
+    padding:28px 20px 22px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .arabic{
+    font-size:3rem;
+    line-height:1.4;
+    direction:rtl;
+    font-family:"Traditional Arabic","Scheherazade New","Amiri", serif;
+    margin:6px 0 6px;
+    word-break:break-word;
+  }
+  .translit{
+    font-size:1.15rem;
+    color:var(--accent);
+    font-weight:600;
+    margin-bottom:4px;
+  }
+  .meaning{
+    font-size:0.95rem;
+    color:var(--sub);
+    margin-bottom:18px;
+  }
+  .btn-row{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-bottom:6px;
+  }
+  button{
+    border:none;
+    border-radius:14px;
+    padding:12px 16px;
+    font-size:0.95rem;
+    font-weight:600;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    transition: transform .1s ease, opacity .15s ease;
+  }
+  button:active{ transform:scale(0.96); }
+  button:disabled{ opacity:0.5; cursor:not-allowed; }
+  .btn-play{
+    background:var(--accent-2);
+    color:#fff;
+  }
+  .btn-record{
+    background:var(--danger);
+    color:#fff;
+  }
+  .btn-record.recording{
+    background:#7a1f16;
+    animation:pulse 1.1s infinite;
+  }
+  @keyframes pulse{
+    0%{ box-shadow:0 0 0 0 rgba(192,57,43,0.5); }
+    70%{ box-shadow:0 0 0 12px rgba(192,57,43,0); }
+    100%{ box-shadow:0 0 0 0 rgba(192,57,43,0); }
+  }
+  .btn-playback{
+    background:var(--line);
+    color:var(--ink);
+  }
+  .btn-good{
+    background:#3a9d5d;
+    color:#fff;
+  }
+  .btn-retry{
+    background:#d1a63a;
+    color:#2a2210;
+  }
+  .status{
+    font-size:0.8rem;
+    color:var(--sub);
+    min-height:18px;
+    margin-top:6px;
+  }
+  .nav-row{
+    display:flex;
+    justify-content:space-between;
+    margin-top:20px;
+    gap:10px;
+  }
+  .btn-nav{
+    flex:1;
+    background:var(--card);
+    color:var(--ink);
+    border:1px solid var(--line);
+  }
+  .btn-nav.primary{
+    background:var(--accent);
+    color:#fff;
+    border:none;
+  }
+  .dots{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    justify-content:center;
+    margin-top:20px;
+  }
+  .dot{
+    width:10px;height:10px;border-radius:50%;
+    background:var(--line);
+    cursor:pointer;
+    flex-shrink:0;
+  }
+  .dot.done{ background:var(--accent-2); }
+  .dot.good{ background:#3a9d5d; }
+  .dot.mid{ background:#d1a63a; }
+  .dot.bad{ background:var(--danger); }
+  .dot.active{ box-shadow:0 0 0 2px var(--accent); }
+  .score-good{ color:#3a9d5d; }
+  .score-mid{ color:#d1a63a; }
+  .score-bad{ color:var(--danger); }
+  .banner{
+    font-size:0.78rem;
+    color:var(--sub);
+    text-align:center;
+    margin-top:14px;
+    line-height:1.5;
+  }
+  .icon{ width:18px; height:18px; }
+
+  /* ---- Start screen ---- */
+  #startScreen{
+    width:100%;
+    max-width:420px;
+    text-align:center;
+    padding-top:10vh;
+  }
+  #startScreen .card{
+    text-align:left;
+  }
+  #startScreen label{
+    display:block;
+    font-size:0.85rem;
+    color:var(--sub);
+    margin-bottom:6px;
+  }
+  #studentNameInput{
+    width:100%;
+    padding:12px 14px;
+    font-size:1rem;
+    border-radius:12px;
+    border:1px solid var(--line);
+    background:var(--bg);
+    color:var(--ink);
+    margin-bottom:14px;
+  }
+  #startBtn{
+    width:100%;
+    background:var(--accent);
+    color:#fff;
+    justify-content:center;
+    padding:14px;
+    font-size:1rem;
+  }
+  #nameError{
+    color:var(--danger);
+    font-size:0.8rem;
+    display:none;
+    margin-bottom:8px;
+  }
+
+  /* ---- Top bar with student name + recap access ---- */
+  .top-bar{
+    width:100%;
+    max-width:480px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:6px;
+    font-size:0.85rem;
+    color:var(--sub);
+  }
+  .top-bar .student-chip{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:4px 12px;
+    font-weight:600;
+    color:var(--ink);
+  }
+  .btn-recap{
+    background:var(--card);
+    color:var(--accent);
+    border:1px solid var(--line);
+    padding:8px 12px;
+    font-size:0.85rem;
+  }
+
+  /* ---- Recap screen ---- */
+  #recapScreen{
+    width:100%;
+    max-width:560px;
+    display:none;
+  }
+  .recap-header{
+    text-align:center;
+    margin-bottom:14px;
+  }
+  .recap-summary{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-bottom:18px;
+  }
+  .recap-summary .pill{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:8px 14px;
+    font-size:0.85rem;
+  }
+  .recap-item{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:14px;
+    margin-bottom:10px;
+  }
+  .recap-item-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:8px;
+    margin-bottom:8px;
+  }
+  .recap-arabic{
+    font-family:"Traditional Arabic","Scheherazade New","Amiri", serif;
+    font-size:1.5rem;
+    direction:rtl;
+  }
+  .recap-translit{
+    font-size:0.85rem;
+    color:var(--accent);
+    font-weight:600;
+  }
+  .recap-meaning{
+    font-size:0.78rem;
+    color:var(--sub);
+  }
+  .badge{
+    font-size:0.72rem;
+    font-weight:700;
+    padding:3px 9px;
+    border-radius:999px;
+    white-space:nowrap;
+    flex-shrink:0;
+  }
+  .badge.good{ background:#3a9d5d22; color:#3a9d5d; }
+  .badge.retry{ background:#d1a63a22; color:#d1a63a; }
+  .badge.none{ background:var(--line); color:var(--sub); }
+  .recap-actions{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-top:8px;
+  }
+  .recap-actions button{
+    padding:8px 12px;
+    font-size:0.78rem;
+  }
+  .btn-mini-play{ background:var(--accent-2); color:#fff; }
+  .btn-teacher-ok{ background:#3a9d5d; color:#fff; }
+  .btn-teacher-no{ background:var(--danger); color:#fff; }
+  .btn-teacher-ok.inactive, .btn-teacher-no.inactive{ opacity:0.35; }
+  .no-recording{
+    font-size:0.75rem;
+    color:var(--sub);
+    font-style:italic;
+  }
+  .teacher-tag{
+    font-size:0.7rem;
+    font-weight:700;
+    margin-left:6px;
+  }
+  .teacher-tag.ok{ color:#3a9d5d; }
+  .teacher-tag.no{ color:var(--danger); }
+
+  footer.credit{
+    margin-top:28px;
+    text-align:center;
+    font-size:0.72rem;
+    color:var(--sub);
+    opacity:0.8;
+    padding-bottom:10px;
+  }
+</style>
+</head>
+<body>
+<div id="startScreen">
+  <h1>🕌 Kosakata Perkenalan (التعارف)</h1>
+  <div class="subtitle">Dengar contoh bacaan, lalu rekam suaramu dan bandingkan</div>
+  <div class="card">
+    <label for="studentNameInput">Nama Siswa</label>
+    <input type="text" id="studentNameInput" placeholder="Tulis nama lengkapmu">
+    <div id="nameError">Nama belum diisi, isi dulu ya.</div>
+    <button id="startBtn">Mulai Latihan</button>
+  </div>
+</div>
+
+<div id="appScreen" style="display:none; width:100%; flex-direction:column; align-items:center;">
+<h1>🕌 Kosakata Perkenalan (التعارف)</h1>
+<div class="subtitle">Dengar contoh bacaan, lalu rekam suaramu dan bandingkan</div>
+
+<div class="top-bar">
+  <span class="student-chip" id="studentChip">👤 -</span>
+  <button class="btn-recap" id="recapBtn">📋 Lihat Rekap</button>
+</div>
+
+<div class="wrap">
+  <div class="progress-row">
+    <span id="counter">Kata 1 / 20</span>
+    <span id="scoreLabel">Dikuasai: 0/20</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:5%"></div></div>
+
+  <div class="card">
+    <div class="arabic" id="arabicText">مرحبا</div>
+    <div class="translit" id="translitText">Marhaban</div>
+    <div class="meaning" id="meaningText">Halo / Selamat datang</div>
+
+    <div class="btn-row">
+      <button class="btn-play" id="playBtn">🔊 Dengar Contoh</button>
+      <button class="btn-record" id="recordBtn">🎙️ Rekam Suara</button>
+      <button class="btn-playback" id="playbackBtn" disabled>▶️ Putar Rekaman</button>
+    </div>
+    <div class="status" id="statusText"></div>
+    <div id="scoreBadge" style="display:none; margin-top:10px; font-weight:700; font-size:1.1rem;"></div>
+    <div id="recognizedRow" style="font-size:0.78rem; color:var(--sub); margin-top:2px;"></div>
+    <div class="btn-row" id="assessRow" style="display:none; margin-top:16px; border-top:1px solid var(--line); padding-top:16px;">
+      <button class="btn-good" id="markGoodBtn">✅ Sudah Benar</button>
+      <button class="btn-retry" id="markRetryBtn">🔁 Perlu Latihan Lagi</button>
+    </div>
+  </div>
+
+  <div class="nav-row">
+    <button class="btn-nav" id="prevBtn">← Sebelumnya</button>
+    <button class="btn-nav primary" id="nextBtn">Berikutnya →</button>
+  </div>
+
+  <div class="dots" id="dotsRow"></div>
+
+  <div class="banner">
+    Cara pakai: 1) Dengar contoh bacaan model. 2) Rekam suaramu sendiri, lalu putar ulang dan bandingkan dengan contoh (bisa juga didengarkan guru). 3) Tandai sendiri "✅ Sudah Benar" kalau pelafalanmu sudah sesuai, atau "🔁 Perlu Latihan Lagi" kalau masih perlu diulang. 4) Di akhir, buka "Lihat Rekap" supaya guru bisa memutar ulang tiap rekaman dan menentukan sendiri apakah sudah sesuai. Sistem juga mencoba menebak ucapanmu secara otomatis (kalau berhasil), tapi ini hanya perkiraan kasar dan sering meleset untuk kata Arab tunggal, jadi jangan dijadikan patokan utama benar/salah.
+  </div>
+</div>
+</div>
+
+<div id="recapScreen">
+  <div class="recap-header">
+    <h1 style="font-size:1.15rem;">📋 Rekap Latihan</h1>
+    <div class="subtitle" id="recapStudentLine">Nama: -</div>
+  </div>
+  <div class="recap-summary">
+    <div class="pill">✅ Versi siswa: <b id="recapGoodCount">0</b>/20</div>
+    <div class="pill">👩‍🏫 Dikonfirmasi guru: <b id="recapTeacherCount">0</b>/20</div>
+  </div>
+  <div id="recapList"></div>
+  <div class="nav-row" style="margin-top:10px;">
+    <button class="btn-nav" id="backToPracticeBtn">← Kembali ke Latihan</button>
+  </div>
+</div>
+
+<footer class="credit">Dibuat oleh Muh. Rouf Ismail — SMK N 2 Sudimoro</footer>
+
+<script>
+const words = [
+  {ar:"مَرْحَبًا", tr:"Marhaban", id:"Halo / Selamat datang"},
+  {ar:"السَّلَامُ عَلَيْكُمْ", tr:"Assalamu'alaikum", id:"Semoga keselamatan atasmu (salam)"},
+  {ar:"وَعَلَيْكُمُ السَّلَامُ", tr:"Wa'alaikumussalam", id:"Dan atasmu juga keselamatan (jawaban salam)"},
+  {ar:"صَبَاحُ الْخَيْرِ", tr:"Shabahul khair", id:"Selamat pagi"},
+  {ar:"مَسَاءُ الْخَيْرِ", tr:"Masa'ul khair", id:"Selamat sore/malam"},
+  {ar:"اِسْمِي", tr:"Ismii", id:"Namaku"},
+  {ar:"مَا اسْمُكَ", tr:"Maa ismuka", id:"Siapa namamu? (untuk laki-laki)"},
+  {ar:"مَا اسْمُكِ", tr:"Maa ismuki", id:"Siapa namamu? (untuk perempuan)"},
+  {ar:"أَنَا", tr:"Ana", id:"Saya"},
+  {ar:"أَنْتَ", tr:"Anta", id:"Kamu (laki-laki)"},
+  {ar:"أَنْتِ", tr:"Anti", id:"Kamu (perempuan)"},
+  {ar:"هُوَ", tr:"Huwa", id:"Dia (laki-laki)"},
+  {ar:"هِيَ", tr:"Hiya", id:"Dia (perempuan)"},
+  {ar:"مِنْ أَيْنَ أَنْتَ", tr:"Min aina anta", id:"Dari mana kamu? (laki-laki)"},
+  {ar:"أَنَا مِنْ إِنْدُونِيسِيَا", tr:"Ana min Indonesia", id:"Saya dari Indonesia"},
+  {ar:"كَمْ عُمْرُكَ", tr:"Kam 'umruka", id:"Berapa umurmu? (laki-laki)"},
+  {ar:"عُمْرِي...سَنَةً", tr:"'Umrii ... sanah", id:"Umurku ... tahun"},
+  {ar:"أَيْنَ تَسْكُنُ", tr:"Aina taskunu", id:"Di mana kamu tinggal?"},
+  {ar:"تَشَرَّفْنَا", tr:"Tasyarrafnaa", id:"Senang berkenalan denganmu"},
+  {ar:"مَعَ السَّلَامَةِ", tr:"Ma'assalaamah", id:"Sampai jumpa / selamat tinggal"}
+];
+
+let idx = 0;
+let mediaRecorder = null;
+let audioChunks = [];
+let recordedUrl = null;
+let recordedAudioEl = new Audio();
+let isRecording = false;
+let studentName = '';
+
+// status[i] = 'good' | 'retry' | undefined  --> penilaian MANDIRI (oleh siswa), ini yang jadi patokan progres latihan
+let status = {};
+// recordings[i] = object URL rekaman kata ke-i (tersimpan selama sesi/tab ini masih terbuka)
+let recordings = {};
+// teacherMark[i] = 'ok' | 'no' | undefined --> penilaian GURU di panel rekap
+let teacherMark = {};
+
+// ---- Speech recognition (OPSIONAL, hanya hint tambahan — sering meleset untuk kata Arab tunggal) ----
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognition = null;
+let recognitionSupported = !!SR;
+let recognizedTranscript = '';
+if (recognitionSupported) {
+  recognition = new SR();
+  recognition.lang = 'ar-SA';
+  recognition.continuous = true;
+  recognition.interimResults = false;
+  recognition.onresult = (e) => {
+    let t = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      t += e.results[i][0].transcript;
+    }
+    recognizedTranscript += t;
+  };
+  recognition.onerror = () => {};
+}
+
+function updateProgressLabel(){
+  const vals = Object.values(status);
+  const goodCount = vals.filter(v=>v==='good').length;
+  if(vals.length === 0){
+    scoreLabel.textContent = 'Dikuasai: 0/' + words.length;
+    return;
+  }
+  scoreLabel.textContent = 'Dikuasai: ' + goodCount + '/' + words.length;
+}
+
+const arabicText = document.getElementById('arabicText');
+const translitText = document.getElementById('translitText');
+const meaningText = document.getElementById('meaningText');
+const counter = document.getElementById('counter');
+const scoreLabel = document.getElementById('scoreLabel');
+const progressFill = document.getElementById('progressFill');
+const statusText = document.getElementById('statusText');
+const playBtn = document.getElementById('playBtn');
+const recordBtn = document.getElementById('recordBtn');
+const playbackBtn = document.getElementById('playbackBtn');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const dotsRow = document.getElementById('dotsRow');
+const scoreBadge = document.getElementById('scoreBadge');
+const recognizedRow = document.getElementById('recognizedRow');
+const assessRow = document.getElementById('assessRow');
+const markGoodBtn = document.getElementById('markGoodBtn');
+const markRetryBtn = document.getElementById('markRetryBtn');
+
+const startScreen = document.getElementById('startScreen');
+const appScreen = document.getElementById('appScreen');
+const recapScreen = document.getElementById('recapScreen');
+const studentNameInput = document.getElementById('studentNameInput');
+const startBtn = document.getElementById('startBtn');
+const nameError = document.getElementById('nameError');
+const studentChip = document.getElementById('studentChip');
+const recapBtn = document.getElementById('recapBtn');
+const backToPracticeBtn = document.getElementById('backToPracticeBtn');
+const recapStudentLine = document.getElementById('recapStudentLine');
+const recapGoodCount = document.getElementById('recapGoodCount');
+const recapTeacherCount = document.getElementById('recapTeacherCount');
+const recapList = document.getElementById('recapList');
+
+startBtn.addEventListener('click', ()=>{
+  const name = studentNameInput.value.trim();
+  if(!name){
+    nameError.style.display = 'block';
+    return;
+  }
+  nameError.style.display = 'none';
+  studentName = name;
+  studentChip.textContent = '👤 ' + studentName;
+  startScreen.style.display = 'none';
+  appScreen.style.display = 'flex';
+  render();
+});
+studentNameInput.addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter') startBtn.click();
+});
+
+recapBtn.addEventListener('click', ()=>{
+  if(isRecording){ stopRecording(); }
+  appScreen.style.display = 'none';
+  recapScreen.style.display = 'block';
+  renderRecap();
+});
+backToPracticeBtn.addEventListener('click', ()=>{
+  recapScreen.style.display = 'none';
+  appScreen.style.display = 'flex';
+  render();
+});
+
+function renderRecap(){
+  const now = new Date();
+  const tanggal = now.toLocaleDateString('id-ID', {day:'2-digit', month:'long', year:'numeric'});
+  const jam = now.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
+  recapStudentLine.textContent = 'Nama: ' + studentName + ' • ' + tanggal + ' ' + jam;
+
+  const goodCount = Object.values(status).filter(v=>v==='good').length;
+  const teacherOkCount = Object.values(teacherMark).filter(v=>v==='ok').length;
+  recapGoodCount.textContent = goodCount;
+  recapTeacherCount.textContent = teacherOkCount;
+
+  recapList.innerHTML = '';
+  words.forEach((w,i)=>{
+    const item = document.createElement('div');
+    item.className = 'recap-item';
+
+    const badgeClass = status[i]==='good' ? 'good' : (status[i]==='retry' ? 'retry' : 'none');
+    const badgeText = status[i]==='good' ? '✅ Siswa: Benar' : (status[i]==='retry' ? '🔁 Siswa: Perlu Latihan' : '– Belum dicoba');
+
+    const teacherTag = teacherMark[i]
+      ? '<span class="teacher-tag ' + (teacherMark[i]==='ok' ? 'ok">👩‍🏫 Guru: Sesuai' : 'no">👩‍🏫 Guru: Belum Sesuai') + '</span>'
+      : '';
+
+    item.innerHTML = `
+      <div class="recap-item-top">
+        <div>
+          <div class="recap-arabic">${w.ar}</div>
+          <div class="recap-translit">${w.tr}</div>
+          <div class="recap-meaning">${w.id}</div>
+        </div>
+        <div style="text-align:right;">
+          <span class="badge ${badgeClass}">${badgeText}</span><br>
+          ${teacherTag}
+        </div>
+      </div>
+      <div class="recap-actions" id="recapActions-${i}"></div>
+    `;
+    recapList.appendChild(item);
+
+    const actionsRow = item.querySelector('#recapActions-' + i);
+
+    if(recordings[i]){
+      const playBtnEl = document.createElement('button');
+      playBtnEl.className = 'btn-mini-play';
+      playBtnEl.textContent = '▶️ Putar Rekaman Kata ' + (i+1);
+      playBtnEl.addEventListener('click', ()=>{
+        const a = new Audio(recordings[i]);
+        a.play();
+      });
+      actionsRow.appendChild(playBtnEl);
+    } else {
+      const noRec = document.createElement('span');
+      noRec.className = 'no-recording';
+      noRec.textContent = 'Belum ada rekaman untuk kata ini';
+      actionsRow.appendChild(noRec);
+    }
+
+    const okBtn = document.createElement('button');
+    okBtn.className = 'btn-teacher-ok' + (teacherMark[i]==='ok' ? '' : ' inactive');
+    okBtn.textContent = '✅ Sesuai';
+    okBtn.addEventListener('click', ()=>{
+      teacherMark[i] = (teacherMark[i]==='ok') ? undefined : 'ok';
+      renderRecap();
+    });
+    actionsRow.appendChild(okBtn);
+
+    const noBtn = document.createElement('button');
+    noBtn.className = 'btn-teacher-no' + (teacherMark[i]==='no' ? '' : ' inactive');
+    noBtn.textContent = '❌ Belum Sesuai';
+    noBtn.addEventListener('click', ()=>{
+      teacherMark[i] = (teacherMark[i]==='no') ? undefined : 'no';
+      renderRecap();
+    });
+    actionsRow.appendChild(noBtn);
+  });
+}
+
+function buildDots(){
+  dotsRow.innerHTML = '';
+  words.forEach((w,i)=>{
+    const d = document.createElement('div');
+    let cls = 'dot';
+    if(i===idx) cls += ' active';
+    if(status[i]==='good') cls += ' good';
+    else if(status[i]==='retry') cls += ' mid';
+    d.className = cls;
+    d.title = 'Kata ' + (i+1) + (status[i] ? (status[i]==='good' ? ' — sudah benar' : ' — perlu latihan lagi') : '');
+    d.addEventListener('click', ()=>{ idx = i; render(); });
+    dotsRow.appendChild(d);
+  });
+}
+
+function render(){
+  const w = words[idx];
+  arabicText.textContent = w.ar;
+  translitText.textContent = w.tr;
+  meaningText.textContent = w.id;
+  counter.textContent = 'Kata ' + (idx+1) + ' / ' + words.length;
+  updateProgressLabel();
+  progressFill.style.width = (((idx+1)/words.length)*100) + '%';
+  statusText.textContent = '';
+  recognizedRow.textContent = '';
+  assessRow.style.display = 'none';
+  if(status[idx]){
+    scoreBadge.style.display = 'block';
+    scoreBadge.className = status[idx]==='good' ? 'score-good' : 'score-mid';
+    scoreBadge.textContent = status[idx]==='good' ? '✅ Sudah ditandai benar' : '🔁 Ditandai: perlu latihan lagi';
+  } else {
+    scoreBadge.style.display = 'none';
+  }
+  playbackBtn.disabled = true;
+  recordedUrl = null;
+  if(recordings[idx]){
+    recordedUrl = recordings[idx];
+    recordedAudioEl.src = recordedUrl;
+    playbackBtn.disabled = false;
+    assessRow.style.display = 'flex';
+  }
+  prevBtn.disabled = (idx===0);
+  nextBtn.textContent = (idx===words.length-1) ? 'Selesai ✓' : 'Berikutnya →';
+  if(isRecording){ stopRecording(); }
+  buildDots();
+}
+
+playBtn.addEventListener('click', ()=>{
+  if(!('speechSynthesis' in window)){
+    statusText.textContent = 'Browser ini tidak mendukung text-to-speech.';
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(words[idx].ar);
+  utter.lang = 'ar-SA';
+  utter.rate = 0.85;
+  const voices = window.speechSynthesis.getVoices();
+  const arVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('ar'));
+  if(arVoice) utter.voice = arVoice;
+  else statusText.textContent = 'Catatan: suara Arab bawaan tidak ditemukan, memakai suara default.';
+  utter.onstart = ()=>{ statusText.textContent = 'Memutar contoh...'; };
+  utter.onend = ()=>{ if(statusText.textContent === 'Memutar contoh...') statusText.textContent = ''; };
+  window.speechSynthesis.speak(utter);
+});
+
+recordBtn.addEventListener('click', async ()=>{
+  if(isRecording){
+    stopRecording();
+    return;
+  }
+  try{
+    const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+    audioChunks = [];
+    mediaRecorder = new MediaRecorder(stream);
+    mediaRecorder.ondataavailable = e => { if(e.data.size>0) audioChunks.push(e.data); };
+    mediaRecorder.onstop = ()=>{
+      const blob = new Blob(audioChunks, {type:'audio/webm'});
+      recordedUrl = URL.createObjectURL(blob);
+      recordedAudioEl.src = recordedUrl;
+      playbackBtn.disabled = false;
+      recordings[idx] = recordedUrl;
+      stream.getTracks().forEach(t=>t.stop());
+    };
+    mediaRecorder.start();
+
+    recognizedTranscript = '';
+    if(recognitionSupported){
+      try{ recognition.start(); }catch(e){ /* mungkin sudah jalan */ }
+    }
+
+    isRecording = true;
+    recordBtn.classList.add('recording');
+    recordBtn.textContent = '⏹️ Berhenti Rekam';
+    statusText.textContent = 'Merekam... ucapkan kata di atas, lalu tekan berhenti.';
+  }catch(err){
+    statusText.textContent = 'Tidak bisa mengakses mikrofon. Izinkan akses mikrofon di browser.';
+  }
+});
+
+function stopRecording(){
+  if(mediaRecorder && mediaRecorder.state !== 'inactive'){
+    mediaRecorder.stop();
+  }
+  isRecording = false;
+  recordBtn.classList.remove('recording');
+  recordBtn.textContent = '🎙️ Rekam Suara';
+
+  if(recognitionSupported){
+    try{ recognition.stop(); }catch(e){}
+    setTimeout(showRecognitionHint, 350);
+  }
+  assessRow.style.display = 'flex';
+  statusText.textContent = 'Rekaman selesai. Putar ulang, bandingkan dengan contoh, lalu tandai hasilnya di bawah.';
+}
+
+function showRecognitionHint(){
+  const heard = recognizedTranscript || '';
+  recognizedRow.textContent = heard
+    ? ('Dugaan sistem (bukan patokan pasti): "' + heard + '"')
+    : 'Sistem tidak berhasil menebak ucapan ini — wajar untuk kata Arab pendek, gunakan penilaian mandiri di bawah.';
+}
+
+function markStatus(newStatus){
+  status[idx] = newStatus;
+  scoreBadge.style.display = 'block';
+  scoreBadge.className = newStatus==='good' ? 'score-good' : 'score-mid';
+  scoreBadge.textContent = newStatus==='good' ? '✅ Sudah ditandai benar' : '🔁 Ditandai: perlu latihan lagi';
+  updateProgressLabel();
+  buildDots();
+}
+markGoodBtn.addEventListener('click', ()=> markStatus('good'));
+markRetryBtn.addEventListener('click', ()=> markStatus('retry'));
+
+playbackBtn.addEventListener('click', ()=>{
+  if(recordedUrl){
+    recordedAudioEl.play();
+    statusText.textContent = 'Memutar rekamanmu...';
+  }
+});
+
+prevBtn.addEventListener('click', ()=>{
+  if(idx>0){ idx--; render(); }
+});
+nextBtn.addEventListener('click', ()=>{
+  if(idx<words.length-1){ idx++; render(); }
+  else{
+    const vals = Object.values(status);
+    const goodCount = vals.filter(v=>v==='good').length;
+    statusText.textContent = 'Selamat! Kamu sudah melalui semua 20 kosakata (' + goodCount + '/' + words.length + ' ditandai benar). Tekan "📋 Lihat Rekap" di atas untuk ditunjukkan ke guru. 🎉';
+  }
+});
+
+if('speechSynthesis' in window){
+  window.speechSynthesis.onvoiceschanged = ()=>{};
+}
+
+</script>
+</body>
+</html>
